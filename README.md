@@ -286,3 +286,4 @@ npx react-native run-ios
 ```
 
 Wait for some time and your application will be automatically installed and launched in the Android emulator.
+
