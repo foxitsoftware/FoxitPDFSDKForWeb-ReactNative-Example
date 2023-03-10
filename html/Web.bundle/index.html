@@ -1,0 +1,38 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="./lib/PDFViewCtrl.css">
+</head>
+<body>
+<input type="file" name="file" id="file" accept=".pdf">
+<div style="width: 100%; height: 500px; overflow: auto;"><div id="pdf-viewer"></div></div>
+
+<script src="./lib/PDFViewCtrl.full.js"></script>
+<script>
+    var licenseSN = "Dd4rgmZQmKVeaLv1Etliw2xtI1cxPfiaM6vKE+F2pK1bKNhSErchLw==";
+    var licenseKey = "PjwcmTRQOS6obxtUBTkWC1CwUpowpdVN54JNLFle9KV7hMjzIz9ekCa0/8IzQJO/XAC/5aJdVLvTtH3+KzD8M3Dd+vf/zVT0vD2U92oKbvewKN3fb3gC/iJlZ6Q8et7PSilRNewI5ATE2ksl0mPQjrHQRCkpcre24X51ZfN68KimaDl2huJ75S6EW0Hubt9UKo72Ph/tT8AE7jU6OVrx5YdxdVXeSs9DIY9MTPx7/6uLJgo4Vfp2Jlg0LEZ3LmBNmY4TfS24eJZN3DZpMgLxJaqyGm6ossVFCNl5i5m+NOrCGT/PenHkFgeGNMCZH94b9FRlD2N9GhXK8X0bwO2qRo7uHYDICtXxXELEdBWRk74oYnHVgiO2RUMeFrdKUDWrvmym82gaOsEt5QU786RtKreFr9FGZyeWjWd0hdswTMxkhh5f1HRuw6oTP1ZGX8Xiip0434iQRqnOjp6Q9ub29nIIo+g7GhXkQcKqtql4Ojj29qO0nASp1laLLEbY3yFbClqucoXQmhDHKC3xrtXMCnYeQbFLdFDrzxhfJmU1RC1qBUnsfjbZoQBOHR9hGGChqBt3Xd2SHGCGxTmfGvOFNoLf1YIyDm2KXKCNUV8mapsehc+sPv3+Ak8n5HRVjP12JiLDgSiM4ArFKewSP/H7ol+5T1yw0FD2maPEZaxIkFaHePib9a76rlszWGU8fzDRTjdVZ6/K0lxP9l+n9WdTmPlzEY6aYz9i5KgwemrVoxlzxxdvZyAk/Bj9GUQDm773slheNiJrTMQYjgyryfbBbPeT+nxCqvy5HN+CnfCLU+FIWt1RpPRYGknyWSgrI4WEXzV7KvGDkhKumS5tf+6tsapDeabSw7ihqGu/dz6Cm7M/y3zol3JuoYGe4+NXu6katY2v+mQN2zUbgaT6ATwDT1LE4gOgFsnaGaW2+ZgTzXDmHjulvRMsaFIOpkbDVFumA8cpcDxtX1tnb5ZqcrhBsx/ZivmmDZGvxWKe353sNiC6Xlac6LU9532CFKiznOKqmBGxu0ERkR5TlJqOzDXGu91SaNvhWx1O2mbZglH6BGboNTa5z8gPkHfMIRoUn4dar/UJvE+s9zfry4sHFN04bR7ep07Gz/xIpE02CsP2/N1OqqhjPP733CQanDnPYIyLVE7RtYQJcTwromsRAH6AKzFUe5ag1vkP+WeO/sHQlwEC3A2zx0EaQANdlzS0Fki0dX+TFt0IF8EAe8gl+AjTeq2V";
+
+    var PDFViewer = PDFViewCtrl.PDFViewer;
+    var pdfViewer = new PDFViewer({
+        libPath: './lib',
+        jr: {
+            licenseSN: licenseSN,
+            licenseKey: licenseKey,
+        },
+        customs: {
+            ScrollWrap: PDFViewCtrl.CustomScrollWrap
+        }
+    });
+    pdfViewer.init('#pdf-viewer');
+
+    document.getElementById('file').onchange = function (e) {
+        if (!this.value) {
+            return;
+        }
+        pdfViewer.openPDFByFile(e.target.files[0]);
+        this.value = '';
+    };
+</script>
+</body>
+</html>
