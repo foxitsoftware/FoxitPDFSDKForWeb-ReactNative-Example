@@ -38,6 +38,9 @@ npm install
 Navigate to `RNWebSDKExample/android`, and execute:
 
 ```bash
+# win
+gradlew build
+# mac, linux
 ./gradlew build
 ```
 
