@@ -9,7 +9,6 @@ import { WebView } from 'react-native-webview';
 
 function App(): JSX.Element {
 
-  // const sourceUri = 'http://10.103.4.217:9999/FoxitPDFSDKForWeb/publish/8.5.2/FoxitPDFSDKForWeb_8_5_2_Full/examples/PDFViewCtrl/basic_webViewer/';
   const sourceUri = (Platform.OS === 'android' ? 'file:///android_asset/' : '') + 'Web.bundle/index.html';
 
   return (

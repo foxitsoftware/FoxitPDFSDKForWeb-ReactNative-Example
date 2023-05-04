@@ -2,37 +2,63 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="./lib/PDFViewCtrl.css">
+    <link rel="stylesheet" type="text/css" href="./lib/UIExtension.css">
+    <style>
+        html {
+            overflow: hidden;
+        }
+        body {
+            height: 100vh;
+        }
+        #pdf-ui {
+            top: 40px;
+            bottom: 0;
+            position: absolute;
+            width: 100vw;
+        }
+    </style>
 </head>
 <body>
-<input type="file" name="file" id="file" accept=".pdf">
-<div style="width: 100%; height: 500px; overflow: auto;"><div id="pdf-viewer"></div></div>
+<div class="fv__ui-nav">
+    <div class="fv__ui-nav-logo">
+        <i class="fv__icon-logo"></i>
+    </div>
+</div>
+<div id="pdf-ui"></div>
 
-<script src="./lib/PDFViewCtrl.full.js"></script>
+<script src="./lib/UIExtension.full.js"></script>
+<script src="./lib/preload-jr-worker.js"></script>
 <script>
-    var licenseSN = 'xxx';
-    var licenseKey = 'xxx';
+    const licenseSN = 'xxx';
+    const licenseKey = 'xxx';
 
-    var PDFViewer = PDFViewCtrl.PDFViewer;
-    var pdfViewer = new PDFViewer({
-        libPath: './lib',
-        jr: {
-            licenseSN: licenseSN,
-            licenseKey: licenseKey,
-        },
-        customs: {
-            ScrollWrap: PDFViewCtrl.CustomScrollWrap
-        }
+    const readyWorker = preloadJrWorker({
+        workerPath: './lib/',
+        enginePath: '../lib/jr-engine/gsdk',
+        fontPath: 'http://webpdf.foxitsoftware.com/webfonts/',
+        licenseSN: licenseSN,
+        licenseKey: licenseKey
     });
-    pdfViewer.init('#pdf-viewer');
 
-    document.getElementById('file').onchange = function (e) {
-        if (!this.value) {
-            return;
+    const PDFUI = UIExtension.PDFUI;
+    const pdfui = new PDFUI({
+        viewerOptions: {
+            libPath: './lib',
+            jr: {
+                readyWorker: readyWorker
+            }
+        },
+        renderTo: '#pdf-ui',
+        appearance: UIExtension.appearances.adaptive,
+        fragments: [],
+        addons: './lib/uix-addons/allInOne.mobile.js'
+    });
+
+    pdfui.openPDFByHttpRangeRequest({
+        range: {
+            url: 'https://webviewer-examples.foxit.com/assets/FoxitPDFSDKforWeb_DemoGuide.pdf',
         }
-        pdfViewer.openPDFByFile(e.target.files[0]);
-        this.value = '';
-    };
+    }, {fileName: 'FoxitPDFSDKforWeb_DemoGuide.pdf'});
 </script>
 </body>
 </html>
