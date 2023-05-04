@@ -108,19 +108,20 @@ Assume you've created a project named `RNWebSDKExample`.
 
 ### 2. Integrate Foxit PDF SDK for Web
 
-#### 2.1 Create a Web resource directory
-
-1. Install dependence.
+#### 2.1 Install dependence.
 ```shell
 cd RNWebSDKExample
 npm install @foxitsoftware/foxit-pdf-sdk-for-web-library
 ```
-2. New an `html` directory in the `RNWebSDKExample` and new a `Web.bundle` folder inside the `html` directory.
-3. Copy the following directories to the `RNWebSDKExample/html/Web.bundle`.
+
+#### 2.2 Create a Web resource directory
+
+1. New an `html` directory in the `RNWebSDKExample` and new a `Web.bundle` folder inside the `html` directory.
+2. Copy the following directories to the `RNWebSDKExample/html/Web.bundle`.
 
 - node_modules/@foxitsoftware/foxit-pdf-sdk-for-web-library/lib
 
-4. Copy the `index.html` file to the `RNWebSDKExample/html/Web.bundle` directory.
+3. Copy the `index.html` file to the `RNWebSDKExample/html/Web.bundle` directory.
 
 ```html
 <html>
@@ -184,9 +185,9 @@ npm install @foxitsoftware/foxit-pdf-sdk-for-web-library
 
 ```
 
-5. Update the licenseSN and licenseKey values in `RNWebSDKExample/html/Web.bundle/index.html` with your own licenseSN and licenseKey that you received from sales.
+4. Update the licenseSN and licenseKey values in `RNWebSDKExample/html/Web.bundle/index.html` with your own licenseSN and licenseKey that you received from sales.
 
-#### 2.2 Set up Web resource directory
+#### 2.3 Set up Web resource directory
 
 ##### Android
 
@@ -210,7 +211,7 @@ android {
 1. Open the `RNWebSDKExample/ios/RNWebSDK.xcworkspace` with XCode.
 2. Expand the left directory tree `RNWebSDKExample/RNWebSDKExample`, drag and drop `RNWebSDKExample/html/Web.bundle` to the directory tree `RNWebSDKExample/RNWebSDKExample`, in the window that pops up, do not check "Copy items if needed" and click "Finish" button.
 
-#### 2.3 Add react-native-webview dependency
+#### 2.4 Add react-native-webview dependency
 
 Navigate to `RNWebSDKExample`, and execute:
 
@@ -220,7 +221,7 @@ npm i react-native-webview
 
 The official documentation explains it in detail: https://github.com/react-native-webview/react-native-webview/blob/master/docs/Getting-Started.md
 
-#### 2.4 Use webview to load and render the Foxit PDF SDK for Web
+#### 2.5 Use webview to load and render the Foxit PDF SDK for Web
 
 There are two ways to load a Web page in a webview, one is to load a URL like this:
 
@@ -279,7 +280,7 @@ import {name as appName} from './app.json';
 AppRegistry.registerComponent(appName, () => App);
 ```
 
-#### 2.5 Running the project
+#### 2.6 Running the project
 
 ##### Android
 
