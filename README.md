@@ -111,7 +111,22 @@ Assume you've created a project named `RNWebSDKExample`.
 #### 2.1 Install dependence.
 ```shell
 cd RNWebSDKExample
-npm install @foxitsoftware/foxit-pdf-sdk-for-web-library
+npm install @foxitsoftware/foxit-pdf-sdk-for-web-library react-native-webview react-native-fs
+```
+
+##### iOS
+```shell
+cd ios
+pod install
+```
+
+##### Android
+```shell
+cd android
+# win
+gradlew build
+# mac, linux
+./gradlew build
 ```
 
 #### 2.2 Create a Web resource directory
@@ -126,63 +141,62 @@ npm install @foxitsoftware/foxit-pdf-sdk-for-web-library
 ```html
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="./lib/UIExtension.css">
-  <style>
-    html {
-      overflow: hidden;
-    }
-    body {
-      height: 100vh;
-    }
-    #pdf-ui {
-      top: 40px;
-      bottom: 0;
-      position: absolute;
-      width: 100vw;
-    }
-  </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" type="text/css" href="./lib/UIExtension.css">
+    <style>
+        html {
+            overflow: hidden;
+        }
+        body {
+            height: 100vh;
+        }
+        #pdf-ui {
+            top: 40px;
+            bottom: 0;
+            position: absolute;
+            width: 100vw;
+        }
+    </style>
 </head>
 <body>
 <div class="fv__ui-nav">
-  <div class="fv__ui-nav-logo">
-    <i class="fv__icon-logo"></i>
-  </div>
+    <div class="fv__ui-nav-logo">
+        <i class="fv__icon-logo"></i>
+    </div>
 </div>
 <div id="pdf-ui"></div>
 
 <script src="./lib/UIExtension.full.js"></script>
 <script src="./lib/preload-jr-worker.js"></script>
 <script>
-  const licenseSN = 'xxx';
-  const licenseKey = 'xxx';
+    const licenseSN = 'xxx';
+    const licenseKey = 'xxx';
+    
+    const readyWorker = preloadJrWorker({
+        workerPath: './lib/',
+        enginePath: '../lib/jr-engine/gsdk',
+        fontPath: 'http://webpdf.foxitsoftware.com/webfonts/',
+        licenseSN: licenseSN,
+        licenseKey: licenseKey
+    });
 
-  const readyWorker = preloadJrWorker({
-    workerPath: './lib/',
-    enginePath: '../lib/jr-engine/gsdk',
-    fontPath: 'http://webpdf.foxitsoftware.com/webfonts/',
-    licenseSN: licenseSN,
-    licenseKey: licenseKey
-  });
-
-  const PDFUI = UIExtension.PDFUI;
-  const pdfui = new PDFUI({
-    viewerOptions: {
-      libPath: './lib',
-      jr: {
-        readyWorker: readyWorker
-      }
-    },
-    renderTo: '#pdf-ui',
-    appearance: UIExtension.appearances.adaptive,
-    fragments: [],
-    addons: './lib/uix-addons/allInOne.mobile.js'
-  });
+    const PDFUI = UIExtension.PDFUI;
+    const pdfui = new PDFUI({
+        viewerOptions: {
+            libPath: './lib',
+            jr: {
+                readyWorker: readyWorker
+            }
+        },
+        renderTo: '#pdf-ui',
+        appearance: UIExtension.appearances.adaptive,
+        fragments: [],
+        addons: './lib/uix-addons/allInOne.mobile.js'
+    });
 </script>
 </body>
 </html>
-
 ```
 
 4. Update the licenseSN and licenseKey values in `RNWebSDKExample/html/Web.bundle/index.html` with your own licenseSN and licenseKey that you received from sales.
@@ -211,21 +225,11 @@ android {
 1. Open the `RNWebSDKExample/ios/RNWebSDK.xcworkspace` with XCode.
 2. Expand the left directory tree `RNWebSDKExample/RNWebSDKExample`, drag and drop `RNWebSDKExample/html/Web.bundle` to the directory tree `RNWebSDKExample/RNWebSDKExample`, in the window that pops up, do not check "Copy items if needed" and click "Finish" button.
 
-#### 2.4 Add react-native-webview dependency
-
-Navigate to `RNWebSDKExample`, and execute:
-
-```bash
-npm i react-native-webview
-```
-
-The official documentation explains it in detail: https://github.com/react-native-webview/react-native-webview/blob/master/docs/Getting-Started.md
-
-#### 2.5 Use webview to load and render the Foxit PDF SDK for Web
+#### 2.4 Use webview to load and render the Foxit PDF SDK for Web
 
 There are two ways to load a Web page in a webview, one is to load a URL like this:
 
-```js
+```tsx
 <WebView
     source={{uri: 'https://www.xxx.com'}}
     originWhitelist={['*']}
@@ -236,8 +240,8 @@ The other is to load local Web resources, which we will use in the following.
 
 1. Create a `src` directory in the `RNWebSDKExample` directory and add the `App.tsx` file to the `src`directory.
 
-```jsx
-import React from 'react';
+```tsx
+import React, { createRef } from 'react';
 import {
   Platform,
   SafeAreaView,
@@ -245,11 +249,57 @@ import {
   View
 } from 'react-native';
 import { WebView } from 'react-native-webview';
- 
+import type { ShouldStartLoadRequest } from 'react-native-webview/lib/WebViewTypes';
+import RNFS from 'react-native-fs';
+import { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
+
 function App(): JSX.Element {
- 
+
   const sourceUri = (Platform.OS === 'android' ? 'file:///android_asset/' : '') + 'Web.bundle/index.html';
- 
+  const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/113.0.5672.69 Mobile/15E148 Safari/604.1';
+
+  const webviewRef = createRef<WebView>();
+
+  function onShouldStartLoadWithRequest(event: ShouldStartLoadRequest) {
+    if (event.url.startsWith('blob:') && event.navigationType === 'click') {
+      const message = {
+        type: 'blobUrlToBase64',
+        payload: event.url,
+      };
+      webviewRef.current?.postMessage(JSON.stringify(message));
+      return false;
+    }
+    return true;
+  }
+
+  const injectedJavaScript = `
+    window.addEventListener('message', function(event) {
+      const data = JSON.parse(event.data);
+      if (data.type === 'blobUrlToBase64') {
+        fetch(data.payload).then(response => response.blob()).then(blob => {
+          const reader = new FileReader();
+          reader.onloadend = function() {
+            const data = {
+              type: 'download',
+              payload: reader.result,
+            };
+            window.ReactNativeWebView.postMessage(JSON.stringify(data)); 
+          }
+          reader.readAsDataURL(blob);
+        });
+      }
+    });
+  `;
+
+  function onMessage(event: WebViewMessageEvent) {
+    const data = JSON.parse(event.nativeEvent.data);
+    if (data.type === 'download') {
+      const base64 = data.payload.split('base64,')[1];
+      const toFile = `${RNFS.DocumentDirectoryPath}/download.pdf`;
+      RNFS.writeFile(toFile, base64, 'base64');
+    }
+  }
+
   return (
     <SafeAreaView>
       <StatusBar/>
@@ -260,12 +310,17 @@ function App(): JSX.Element {
           allowFileAccessFromFileURLs={true}
           allowUniversalAccessFromFileURLs={true}
           allowFileAccess={true}
+          userAgent={userAgent}
+          onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
+          injectedJavaScript={injectedJavaScript}
+          onMessage={onMessage}
+          ref={webviewRef}
         />
       </View>
     </SafeAreaView>
   );
 }
- 
+
 export default App;
 ```
 
@@ -278,6 +333,22 @@ import {AppRegistry} from 'react-native';
 import {name as appName} from './app.json';
  
 AppRegistry.registerComponent(appName, () => App);
+```
+
+#### 2.5 Support download feature
+
+##### iOS
+
+Update `RNWebSDKExample/ios/RNWebSDK/Info.plist` as follows.
+```diff
+<dict>
+    // ...
++ 	<key>UIFileSharingEnabled</key>
++ 	<true/>
++ 	<key>LSSupportsOpeningDocumentsInPlace</key>
++ 	<true/>
+	// ...
+</dict>
 ```
 
 #### 2.6 Running the project
