@@ -10,6 +10,13 @@ import type { ShouldStartLoadRequest } from 'react-native-webview/lib/WebViewTyp
 import RNFS from 'react-native-fs';
 import { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
 
+const extMap = {
+  'application/pdf': 'pdf',
+  'application/vnd.xfdf': 'xfdf',
+  'application/vnd.adobe.fdf': 'fdf',
+  'application/json': 'json',
+};
+
 function App(): JSX.Element {
 
   const sourceUri = (Platform.OS === 'android' ? 'file:///android_asset/' : '') + 'Web.bundle/index.html';
@@ -51,8 +58,10 @@ function App(): JSX.Element {
   function onMessage(event: WebViewMessageEvent) {
     const data = JSON.parse(event.nativeEvent.data);
     if (data.type === 'download') {
+      const mineType = data.payload.split(';base64,')[0].split('data:')[1] as keyof typeof extMap;
+      const ext = extMap[mineType];
       const base64 = data.payload.split('base64,')[1];
-      const toFile = `${RNFS.DocumentDirectoryPath}/download.pdf`;
+      const toFile = `${RNFS.DocumentDirectoryPath}/download.${ext}`;
       RNFS.writeFile(toFile, base64, 'base64');
     }
   }
