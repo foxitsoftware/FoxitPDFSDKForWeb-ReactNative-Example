@@ -356,6 +356,8 @@ Update `RNWebSDKExample/ios/RNWebSDK/Info.plist` as follows.
 + 	<true/>
 + 	<key>LSSupportsOpeningDocumentsInPlace</key>
 + 	<true/>
++   <key>NSCameraUsageDescription</key>
++   <string>$(PRODUCT_NAME) need access to your camera.</string>
 	// ...
 </dict>
 ```
