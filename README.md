@@ -352,13 +352,13 @@ Update `RNWebSDKExample/ios/RNWebSDK/Info.plist` as follows.
 ```diff
 <dict>
     // ...
-+ 	<key>UIFileSharingEnabled</key>
-+ 	<true/>
-+ 	<key>LSSupportsOpeningDocumentsInPlace</key>
-+ 	<true/>
++   <key>UIFileSharingEnabled</key>
++   <true/>
++   <key>LSSupportsOpeningDocumentsInPlace</key>
++   <true/>
 +   <key>NSCameraUsageDescription</key>
 +   <string>$(PRODUCT_NAME) need access to your camera.</string>
-	// ...
+    // ...
 </dict>
 ```
 
