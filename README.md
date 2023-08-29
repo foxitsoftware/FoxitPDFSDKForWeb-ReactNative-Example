@@ -301,7 +301,8 @@ function App(): JSX.Element {
     if (data.type === 'download') {
       let {base64, fileName} = data.payload;
       base64 = base64.split('base64,')[1];
-      const toFile = `${RNFS.DocumentDirectoryPath}/${fileName}`;
+      const path = Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
+      const toFile = `${path}/${fileName}`;
       RNFS.writeFile(toFile, base64, 'base64');
     }
   }
@@ -341,7 +342,7 @@ import {name as appName} from './app.json';
 AppRegistry.registerComponent(appName, () => App);
 ```
 
-#### 2.5 Support download feature
+#### 2.5 Set APP permissions
 
 ##### iOS
 
@@ -357,6 +358,18 @@ Update `RNWebSDKExample/ios/RNWebSDK/Info.plist` as follows.
 +   <string>$(PRODUCT_NAME) need access to your camera.</string>
     // ...
 </dict>
+```
+
+##### Android
+Update `RNWebSDKExample/android/app/src/main/AndroidManifest.xml` as follows.
+```diff
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    // ...
+    <uses-permission android:name="android.permission.INTERNET" />
++   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
++   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    // ...
+</manifest>
 ```
 
 #### 2.6 Running the project

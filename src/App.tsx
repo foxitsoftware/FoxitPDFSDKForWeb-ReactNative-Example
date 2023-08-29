@@ -58,7 +58,8 @@ function App(): JSX.Element {
     if (data.type === 'download') {
       let {base64, fileName} = data.payload;
       base64 = base64.split('base64,')[1];
-      const toFile = `${RNFS.DocumentDirectoryPath}/${fileName}`;
+      const path = Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
+      const toFile = `${path}/${fileName}`;
       RNFS.writeFile(toFile, base64, 'base64');
     }
   }
