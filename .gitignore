@@ -64,3 +64,6 @@ yarn-error.log
 
 /html/Web.bundle/*
 !/html/Web.bundle/index.html
+
+package-lock.json
+yarn.lock
