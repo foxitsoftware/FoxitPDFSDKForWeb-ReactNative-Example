@@ -2,6 +2,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta http-equiv="Service-Worker-Allowed" content="*">
     <link rel="stylesheet" type="text/css" href="./lib/UIExtension.css">
     <style>
         html {
@@ -46,11 +47,6 @@
             libPath: './lib',
             jr: {
                 readyWorker: readyWorker
-            },
-            messageSyncServiceWorker: {
-                options:{
-                    scope: './lib/'
-                }
             }
         },
         renderTo: '#pdf-ui',
