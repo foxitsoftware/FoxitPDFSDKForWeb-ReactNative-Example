@@ -412,26 +412,3 @@ npx react-native run-ios
 ```
 
 Wait for some time and your application will be automatically installed and launched in the Android emulator.
-
-### Reference the `Service-Worker-Allowed` HTTP header
-
-Starting from FoxitPDFSDK for Web version `10.0.0`, since service worker is used, it is necessary to add this field in the HTTP response header of the Service Worker script. Its value is the maximum allowed scope path:
-
-```http
-Service-Worker-Allowed /;
-```
-
-#### React Native 配置示例
-
-Add the service worker allowed attribute to the `<head>` tag. The following is a configuration example：
-
-```js
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-    <meta http-equiv="Service-Worker-Allowed" content="*">
-</head>
-<body>...</body>
-</html>
-```
