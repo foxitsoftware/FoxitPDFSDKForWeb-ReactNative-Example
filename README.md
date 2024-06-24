@@ -188,11 +188,6 @@ gradlew build
             libPath: './lib',
             jr: {
                 readyWorker: readyWorker
-            },
-            messageSyncServiceWorker: {
-                options:{
-                    scope: './lib/'
-                }
             }
         },
         renderTo: '#pdf-ui',
