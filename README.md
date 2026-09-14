@@ -37,3 +37,5 @@ pnpm start
 pnpm android
 pnpm ios
 ```
+
+Note: If occurred "The ios project is malformed, would you like to clear the project files and reinitialize them? ", please enter "y" to continue.

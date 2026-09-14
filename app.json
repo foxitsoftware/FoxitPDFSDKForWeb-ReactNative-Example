@@ -55,6 +55,7 @@
         }
       ],
       "./plugins/with-android-mirrors",
+      "./plugins/with-ios-mirrors",
       "./plugins/with-static-www",
       "expo-asset",
       "expo-file-system"
