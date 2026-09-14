@@ -42,7 +42,6 @@ example
 /ios
 /android
 
-.claude/
-.cursor/
-.vscode/
+/.claude
+/.cursor
 **/foxitwebsdk
